@@ -161,7 +161,7 @@
             <div class="carousel-inner rounded">
                 @foreach($banners as $b)
                 <div class="carousel-item @if($loop->iteration == 1) active @endif">
-                    <img src="{{'storage/'.$b->image_path}}" class="d-block w-100 banner" alt="{{$b->title}}">
+                    <img src="{{Storage::url('public/'.$b->image_path)}}" class="d-block w-100 banner" alt="{{$b->title}}">
                 </div>
                 @endforeach
             </div>
@@ -195,7 +195,7 @@
                         @foreach($j->pamerans as $p)
                         <a href="{{route('pameran.show',$p->id)}}" class="col-md-3 col-sm-6 text-dark" style="text-decoration: none;">
                             <div class="category-card">
-                                <img src="@if($p->files != null && $p->files->where('type','image')->first() != null) {{Storage::url($p->files->where('type','image')->first()->path)}}  @else https://via.placeholder.com/300x200?text={{$p->description}} @endif" class="img-fluid" alt="{{$p->description}}">
+                                <img src="@if($p->files != null && $p->files->where('type','image')->first() != null) {{Storage::url('public/'.$p->files->where('type','image')->first()->path)}}  @else https://via.placeholder.com/300x200?text={{$p->description}} @endif" class="img-fluid" alt="{{$p->description}}">
                                 <div class="p-3">
                                     <p class="category-title">{{$p->title}}</p>
                                     <p class="category-subtitle">oleh {{$p->user->name}} {{$p->user->last_name}}</p>
