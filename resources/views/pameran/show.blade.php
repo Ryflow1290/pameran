@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SVG Repo - Free SVGs</title>
+    <title>PAMERIN - Free SVGs</title>
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- jQuery -->
@@ -84,15 +84,94 @@
         .category-subtitle {
             font-size: 0.75rem;
         }
+
+        .title {
+            font-weight: bold;
+            font-size: 4rem;
+        }
+
+        .date {
+            color: #8f8f8f;
+        }
+
+        .desc {
+            font-size: 1.5rem;
+        }
+
+
+
+        .rate {
+            border-bottom-right-radius: 12px;
+            border-bottom-left-radius: 12px
+        }
+
+        .rating {
+            display: flex;
+            flex-direction: row-reverse;
+            justify-content: center
+        }
+
+        .rating>input {
+            display: none
+        }
+
+        .rating>label {
+            position: relative;
+            width: 1em;
+            font-size: 30px;
+            font-weight: 300;
+            color: #FFD600;
+            cursor: pointer
+        }
+
+        .rating>label::before {
+            content: "\2605";
+            position: absolute;
+            opacity: 0
+        }
+
+        .rating>label:hover:before,
+        .rating>label:hover~label:before {
+            opacity: 1 !important
+        }
+
+        .rating>input:checked~label:before {
+            opacity: 1
+        }
+
+        .rating:hover>input:checked~label:before {
+            opacity: 0.4
+        }
+
+        .buttons {
+            top: 36px;
+            position: relative
+        }
+
+        .rating-submit {
+            border-radius: 8px;
+            color: #fff;
+            height: auto
+        }
+
+        .rating-submit:hover {
+            color: #fff
+        }
+
+        .rated {
+            color: #FFD600;
+
+        }
     </style>
 </head>
+
 
 <body>
 
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg">
         <div class="container">
-            <a class="navbar-brand" href="#">SVG Repo</a>
+            <a class="navbar-brand" href="#">PAMERIN</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -105,19 +184,153 @@
                         <a class="nav-link" href="/project">Semua</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{route('login')}}">Login</a>
+                        <a class="nav-link" href="{{route('login')}}">@guest
+                            Login
+                            @else
+                            Dashboard
+                            @endguest</a>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
-    
-    
+    @if ($errors->any())
+    <div class="alert alert-danger border-left-danger" role="alert">
+        <ul class="pl-4 my-2">
+            @foreach ($errors->all() as $error)
+            <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+    @endif
+    @if (session('success'))
+    <div class="alert alert-success">{{ session('success') }}</div>
+    @endif
+    <div class="container py-5">
+        <div class="row">
+
+            <div class="col-lg-8">
+                <div class="row d-flex flex-col">
+                    <div class="d-flex flex-row justify-content-between align-items-center ">
+                        <div class="title ">
+                            {{$pameran->title}}
+                        </div>
+                        <div class="">
+                            <button class="btn btn-primary" onclick="Copy();" id="kopi">Salin Link </button>
+                        </div>
+                    </div>
+                    <div class="date">
+                        Dipublikasikan {{($pameran->created_at)->diffForHumans()}}
+                    </div>
+
+                    <div class="desc">
+                        {{$pameran->description}}
+                    </div>
+                    <div class="w-100">
+                        <hr>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 p-5">
+                <div class="card p-3">
+                    <h5>{{$pameran->user->name}}</h5>
+                    <p>Program Studi : {{$pameran->jurusan->name}}</p>
+                </div>
+                @foreach($pameran->files->where('type','flyer') as $f)
+                <div class="col-lg-4 w-100 mt-3">
+                    <a class="btn btn-danger" href="{{Storage::url('public/'.$f->path)}}" download="{{$f->caption}}">Download Berkas PDF </a>
+                </div>
+                @endforeach
+            </div>
+        </div>
+        @foreach($pameran->files->where('type','video') as $v)
+        <div>
+            <video controls class="img-thumbnail rounded-4 col-lg-5">
+                <source src="{{ asset('storage/' . $v->path) }}" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <div style="color: #8f8f8f;">
+                &nbsp; {{$v->caption}}
+            </div>
+        </div>
+        @endforeach
+        @foreach($pameran->files->where('type','image') as $i)
+        <div class="align-self-center">
+            <div>
+                <img src="{{Storage::url('public/'.$i->path)}}" class="col-lg-4 rounded-4 border" alt="">
+            </div>
+            <div style="color: #8f8f8f;">
+                &nbsp; {{$i->caption}}
+            </div>
+        </div>
+        @endforeach
+        <div class="">
+            <h5>Abstract</h5>
+            <p>{{$pameran->abstract}}</p>
+        </div>
+    </div>
+    <div class="bg-white py-4">
+        <div class="container">
+            <div class="d-flex flex-column justify-content-center align-items-center">
+                <h4 class=""><strong>Rating</strong></h4>
+                @guest
+                Login First to rating :D
+                @else
+                @if(!$alreadyRated)
+                <div class="card px-4 d-flex justify-content-center mt-5 col-lg-4">
+                    <div class="text-center mb-5">
+                        <form action="{{ route('ratings.store', $pameran->id) }}" id="rating" method="POST" class="text-center rating">
+                            @csrf
+                            <input type="text" name="pameran_id" value="{{$pameran->id}}" hidden>
+                            <input type="radio" name="rating" value="5" id="5">
+                            <label for="5">☆</label> <input type="radio" name="rating" value="4" id="4">
+                            <label for="4">☆</label>
+                            <input type="radio" name="rating" value="3" id="3"><label for="3">☆</label>
+                            <input type="radio" name="rating" value="2" id="2"><label for="2">☆</label>
+                            <input type="radio" name="rating" value="1" id="1"><label for="1">☆</label>
+                        </form>
+                        <div class="buttons  mt-0">
+                            <button class="btn btn-primary" type="submit" form="rating">Submit</button>
+                        </div>
+                    </div>
+                </div>
+                @else
+                Sudah Rating :D
+                @endif
+                @endguest
+                <hr>
+                @foreach($ratings as $r)
+                <div class="py-1 col-lg-6">
+                    <div class="card">
+                        <div class="card-body "><strong>{{$r->user->name}}</strong>
+                            @for($i = $r->count; $i > 0; $i--)
+                            <span class="rated">☆</span>
+                            @endfor
+                        </div>
+                        @if( Auth::check())
+                        @if(Auth::user()->id == $r->user_id)
+                        <div class="card-footer">
+                            <form action="{{ route('ratings.destroy', $r->id) }}" method="POST" class="d-inline">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this rating?')">Delete</button>
+                            </form>
+                        </div>
+                        @endif
+                        @endif
+                    </div>
+                </div>
+                @endforeach
+            </div>
+        </div>
+    </div>
+    </div>
+
 
     <!-- Footer -->
     <footer class="py-4 bg-dark text-white">
         <div class="container text-center">
-            <p>&copy; 2024 SVG Repo. All Rights Reserved.</p>
+            <p>&copy; 2024 PAMERIN. All Rights Reserved.</p>
         </div>
     </footer>
 
@@ -131,6 +344,13 @@
                 $('.tab-pane').removeClass('show active');
                 $(target).addClass('show active');
             });
+            $('#kopi').on('click', function() {
+                Copy();
+            });
+
+            function Copy() {
+                window.navigator.clipboard.writeText('{{url("/pameran/$pameran->id")}}');
+            }
         });
     </script>
 </body>

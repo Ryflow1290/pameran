@@ -108,7 +108,12 @@
                         <a class="nav-link" href="/project">Semua</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{route('login')}}">Login</a>
+                        <a class="nav-link" href="{{route('login')}}">
+                            @guest 
+                            Login 
+                            @else 
+                            Dashboard 
+                            @endguest</a>
                     </li>
                 </ul>
             </div>

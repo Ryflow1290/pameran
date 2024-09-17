@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Jurusan;
 use App\Models\Pameran;
 use App\Models\PameranFile;
+use App\Models\Rating;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,7 +17,7 @@ class PameranController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth')->except('show');
+        $this->middleware(['auth','isMahasiswa'])->except('show');
     }
 
     public function index()
@@ -32,9 +33,9 @@ class PameranController extends Controller
             ->addColumn('actions', function ($pameran) {
                 return '
             <a href="' . route('pameran.edit', $pameran->id) . '" class="btn btn-sm btn-primary">Edit</a>
-            <a class="btn btn-sm btn-danger" data-toggle="modal" data-target="#deleteModal'.$pameran->id.'">Delete</a>
+            <a class="btn btn-sm btn-danger" data-toggle="modal" data-target="#deleteModal' . $pameran->id . '">Delete</a>
             
-            <div class="modal fade" id="deleteModal'.$pameran->id.'" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal fade" id="deleteModal' . $pameran->id . '" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 <div class="modal-dialog" role="document">
     <div class="modal-content">
         <div class="modal-header">
@@ -46,7 +47,7 @@ class PameranController extends Controller
         <div class="modal-body">Delete "' . $pameran->name . '" !.</div>
         <div class="modal-footer">
         <form id="" action="' . route('pameran.destroy', $pameran->id) . '" method="POST" style="">
-                                <input type="hidden" name="_token" value="'.csrf_token().'">
+                                <input type="hidden" name="_token" value="' . csrf_token() . '">
                                 <input type="hidden" name="_method" value="DELETE">
 
             <button class="btn btn-link" type="button" data-dismiss="modal">Cancel</button>
@@ -64,14 +65,14 @@ class PameranController extends Controller
     }
 
     public function create()
-    {   
+    {
         $user = Auth::user();
         $jurusans = Jurusan::all();
         if ($user->role == 'admin') {
-            
-            $users= User::all();
+
+            $users = User::all();
             return view('pameran.create')->with(compact('users'))->with(compact('jurusans'));
-        }else{
+        } else {
             return view('pameran.create')->with(compact('jurusans'));
         }
     }
@@ -86,7 +87,7 @@ class PameranController extends Controller
             'caption.*' => 'required',
             'type.*' => 'required',
         ]);
-        
+
 
 
         // Store pameran
@@ -100,7 +101,7 @@ class PameranController extends Controller
 
         if ($request->hasFile('file')) {
             foreach ($request->file('file') as $key => $file) {
-                $path = $file->store('public/pameran_files');
+                $path = $file->store('public/pameran_files', 'public');
                 $type = $file->getClientOriginalExtension();
                 $foto = ['jpeg', 'png', 'jpg'];
 
@@ -124,8 +125,20 @@ class PameranController extends Controller
 
     public function show($id)
     {
+        $userId = null;
+        if(Auth::check()){
+
+            $userId = Auth::user()->id;
+        }
+
         $pameran = Pameran::with('files')->findOrFail($id);
-        return view('pameran.show', compact('pameran'));
+
+        $alreadyRated = Rating::where('pameran_id', $id)->where('user_id', $userId)->exists();
+
+
+        $ratings = Rating::with('user')->where('pameran_id', $id)->get();
+
+        return view('pameran.show', compact('pameran', 'ratings', 'alreadyRated'));
     }
 
     public function edit($id)
@@ -174,7 +187,7 @@ class PameranController extends Controller
             ]);
         } else {
             $pameran = Pameran::where('user_id', $user->id)->findOrFail($id);
-            
+
             $pameran->update([
                 'title' => $request->input('title'),
                 'abstract' => $request->input('abstract'),
@@ -203,7 +216,7 @@ class PameranController extends Controller
 
         if ($request->hasFile('file')) {
             foreach ($request->file('file') as $key => $file) {
-                $path = $file->store('public/pameran_files');
+                $path = $file->store('public/pameran_files', 'public');
                 $type = $file->getClientOriginalExtension();
                 $foto = ['jpeg', 'png', 'jpg'];
 
@@ -226,9 +239,9 @@ class PameranController extends Controller
     }
 
     public function destroy($id)
-    {   
+    {
         $user = Auth::user();
-        $pameran = $user->role == 'admin' ? Pameran::findOrFail($id) : Pameran::where('user_id',$user->id)->findOrFail($id);
+        $pameran = $user->role == 'admin' ? Pameran::findOrFail($id) : Pameran::where('user_id', $user->id)->findOrFail($id);
         $pameran->files()->delete();
         $pameran->delete();
 

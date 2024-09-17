@@ -7,7 +7,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class BannersController extends Controller
-{
+{   
+    public function __construct()
+    {
+        $this->middleware(['auth','isAdmin']);
+    }
+    
     public function index()
     {
         $banners = Banner::all();

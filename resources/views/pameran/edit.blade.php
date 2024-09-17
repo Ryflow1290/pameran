@@ -124,7 +124,7 @@
                                         <label class="form-control-label">File Submmited *</label>
                                         @endif
                                         <input type="text" id="file{{$loop->iteration}}" class="form-control" name="submittedFile[]" placeholder="" value="{{$f->id}}" hidden>
-                                        <a href="{{Storage::url($f->path)}}" class="form-control bg-primary text-white text-center">
+                                        <a href="{{Storage::url('public/'.$f->path)}}" class="form-control bg-primary text-white text-center">
                                             <i class="fas fa-eye  text-gray-300"></i>
                                         </a>
                                     </div>

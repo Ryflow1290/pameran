@@ -3,6 +3,8 @@
 use App\Http\Controllers\BannersController;
 use App\Http\Controllers\JurusanController;
 use App\Http\Controllers\PameranController;
+use App\Http\Controllers\RatingController;
+
 use App\Models\Banner;
 use App\Models\Jurusan;
 use Illuminate\Support\Facades\Auth;
@@ -21,7 +23,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     $banners = Banner::where('is_active', true)->get();
-    $jurusans = Jurusan::with('pamerans.user','pamerans.files')->get();
+    $jurusans = Jurusan::with('pamerans.user', 'pamerans.files')->get();
     return view('welcome')->with(compact('jurusans'))->with(compact('banners'));
 });
 
@@ -38,6 +40,13 @@ Route::get('/jurusan/data', [JurusanController::class, 'data'])->name('jurusan.d
 Route::resource('pameran', PameranController::class);
 Route::resource('jurusan', JurusanController::class);
 Route::resource('/banners', BannersController::class);
+
+Route::get('ratings', [RatingController::class, 'index'])->name('ratings.index');
+Route::post('ratings', [RatingController::class, 'store'])->name('ratings.store');
+Route::get('ratings/{id}/edit', [RatingController::class, 'edit'])->name('ratings.edit');
+Route::put('ratings/{id}', [RatingController::class, 'update'])->name('ratings.update');
+Route::delete('ratings/{id}', [RatingController::class, 'destroy'])->name('ratings.destroy');
+
 Route::patch('/banners/{id}/toggle-status', [BannersController::class, 'toggleStatus'])->name('banners.toggleStatus');
 
 

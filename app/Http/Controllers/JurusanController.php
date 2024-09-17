@@ -10,7 +10,7 @@ class JurusanController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(['auth','isAdmin']);
+        $this->middleware(['auth', 'isAdmin']);
     }
 
     public function index()
@@ -24,7 +24,7 @@ class JurusanController extends Controller
         return DataTables::of($jurusans)
             ->addColumn('actions', function ($jurusan) {
                 return '
-            <a href="' . route('jurusan.show', $jurusan->id) . '" class="btn btn-sm btn-primary">Edit</a>
+            <a href="' . route('jurusan.edit', $jurusan->id) . '" class="btn btn-sm btn-primary">Edit</a>
             <a href="' . route('jurusan.destroy', $jurusan->id) . '" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#deleteModal">Delete</a>
             
             <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -38,10 +38,13 @@ class JurusanController extends Controller
         </div>
         <div class="modal-body">Delete "' . $jurusan->name . '" !.</div>
         <div class="modal-footer">
+        <form id="" action="' . route('jurusan.destroy', $jurusan->id) . '" method="POST" style="">
+                                <input type="hidden" name="_token" value="' . csrf_token() . '">
+                                <input type="hidden" name="_method" value="DELETE">
+
             <button class="btn btn-link" type="button" data-dismiss="modal">Cancel</button>
-            <a class="btn btn-danger" href="' . route('jurusan.destroy', $jurusan->id) . '" onclick="">Delete</a>
-            <form id="" action="' . route('jurusan.destroy', $jurusan->id) . '" method="POST" style="display: none;">
-                @csrf
+            <button class="btn btn-danger" onclick="" type="submit">Delete</button>
+
             </form>
         </div>
     </div>
