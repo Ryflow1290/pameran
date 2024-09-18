@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\UsersTemplateExport;
+use App\Imports\UsersImport;
 use App\Models\Jurusan;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\Facades\DataTables;
 
 class UsersController extends Controller
@@ -122,5 +125,22 @@ class UsersController extends Controller
 
         // Redirect back with success message
         return redirect()->route('users')->with('success', 'User deleted successfully.');
+    }
+
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,csv'
+        ]);
+
+        Excel::import(new UsersImport, $request->file('file'));
+
+        return redirect()->back()->with('success', 'Users imported successfully.');
+    }
+
+    public function downloadTemplate()
+    {
+        return Excel::download(new UsersTemplateExport, 'users_template.xlsx');
     }
 }

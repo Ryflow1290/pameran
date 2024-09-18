@@ -17,7 +17,11 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'last_name', 'email', 'password', 'role'
+        'name',
+        'last_name',
+        'email',
+        'password',
+        'role'
     ];
 
     /**
@@ -26,7 +30,8 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password',
+        'remember_token',
     ];
 
     /**
@@ -85,5 +90,10 @@ class User extends Authenticatable
     public function pamerans()
     {
         return $this->hasMany(Pameran::class);
+    }
+
+    public function tahun()
+    {
+        return $this->belongsTo(TahunLulus::class, 'tahun_lulus');
     }
 }

@@ -25,6 +25,18 @@
     <script src="https://cdn.datatables.net/2.1.6/js/dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/2.1.6/js/dataTables.jqueryui.min.js"></script>
     <link href="https://cdn.datatables.net/2.1.6/css/dataTables.jqueryui.min.css"></link>
+    
+    <!-- <script src="https://cdn.datatables.net/buttons/3.1.2/js/dataTables.buttons.min.js"></script> -->
+    <link href="https://cdn.datatables.net/buttons/3.1.2/css/buttons.bootstrap.css"></link>
+    <script src="https://cdn.datatables.net/2.1.6/js/jquery.dataTables.min.js"></script>
+<!-- DataTables Buttons JS -->
+<script src="https://cdn.datatables.net/buttons/3.1.2/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/3.1.2/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/3.1.2/js/buttons.print.min.js"></script>
+<!-- JSZip and PDFMake for Excel and PDF buttons -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
     @yield('scripts')
 </head>
 <body id="page-top">
@@ -66,7 +78,7 @@
         </li>
         @endif
         @if(Auth::user()->role == 'admin')
-        <li class="nav-item {{ Nav::isRoute('users.*') }}">
+        <li class="nav-item {{ Nav::isRoute('users') }}">
             <a class="nav-link" href="{{ route('users') }}">
                 <i class="fas fa-fw fa-users"></i>
                 <span>{{ __('Users') }}</span></a>
@@ -82,6 +94,12 @@
             <a class="nav-link" href="{{ route('banners.index') }}">
                 <i class="fas fa-fw fa-box"></i>
                 <span>{{ __('Banner') }}</span></a>
+        </li>
+
+        <li class="nav-item {{ Nav::isRoute('rekap') }}">
+            <a class="nav-link" href="{{ route('rekap') }}">
+                <i class="fas fa-fw fa-clock"></i>
+                <span>{{ __('Rekap') }}</span></a>
         </li>
         
         
@@ -236,5 +254,7 @@
 <script src="{{ asset('vendor/bootstrap/js/bootstrap.min.js') }}"></script>
 <script src="{{ asset('vendor/jquery-easing/jquery.easing.min.js') }}"></script>
 <script src="{{ asset('js/sb-admin-2.min.js') }}"></script>
+
+
 </body>
 </html>

@@ -23,10 +23,10 @@
 </div>
 @endif
 
-<div class="row">
+<div class="row card p-5 shadow">
     <!-- DataTables Example -->
     <div class="col-md-12">
-        <table class="table table-bordered" id="usersTable" width="100%" cellspacing="0">
+        <table class="table table-bordered responsive" id="usersTable" width="100%" cellspacing="0">
             <thead>
                 <tr>
                     <th>ID</th>
@@ -50,6 +50,7 @@
     $(document).ready(function() {
         new DataTable(
             '#usersTable', {
+                responsive: true,
                 processing: true,
                 serverSide: true,
                 ajax: "{{ route('jurusan.data') }}",

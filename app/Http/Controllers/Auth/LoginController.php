@@ -41,7 +41,9 @@ class LoginController extends Controller
 
     protected function redirectTo()
     {
+        $intendedUrl = session()->pull('url.intended', $this->redirectTo);
         session()->flash('success', 'You are logged in!');
-        return session()->pull('url.intended', $this->redirectTo);
+        session()->flash('intended_url', $intendedUrl);
+        return $intendedUrl;
     }
 }

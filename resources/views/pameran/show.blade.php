@@ -178,7 +178,7 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Home</a>
+                        <a class="nav-link" href="{{url('/')}}">Home</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/project">Semua</a>
@@ -235,6 +235,7 @@
                 <div class="card p-3">
                     <h5>{{$pameran->user->name}}</h5>
                     <p>Program Studi : {{$pameran->jurusan->name}}</p>
+                    <p>Tahun Lulus : {{$pameran->user->tahun->tahun}}</p>
                 </div>
                 @foreach($pameran->files->where('type','flyer') as $f)
                 <div class="col-lg-4 w-100 mt-3">

@@ -23,7 +23,20 @@
 </div>
 @endif
 
-<div class="row">
+<form action="{{ route('users.import') }}" class="row card px-5 py-2 shadow" method="POST" enctype="multipart/form-data">
+    @csrf
+    <div class="form-group">
+        <label for="file">Upload Excel File</label>
+        <input type="file" name="file" id="file" class="form-control" required>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Import Users</button>
+    <a href="{{ route('users.template') }}" class="btn btn-primary mb-3 mt-2">
+        Download Excel Template
+    </a>
+</form>
+
+<div class="row card p-5 shadow">
     <!-- DataTables Example -->
     <div class="col-md-12">
         <table class="table table-bordered" id="usersTable" width="100%" cellspacing="0">
@@ -71,6 +84,7 @@
                         data: 'email',
                         name: 'email'
                     },
+                    
                     {
                         data: 'role',
                         name: 'role'

@@ -1,41 +1,108 @@
 @extends('layouts.admin')
 
 @section('main-content')
-    <h1 class="h3 mb-4 text-gray-800">Manage Ratings</h1>
+<h1 class="h3 mb-4 text-gray-800">Manage Ratings</h1>
 
-    @if (session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
-    @endif
+@if (session('success'))
+<div class="alert alert-success">{{ session('success') }}</div>
+@endif
 
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Pameran</th>
-                <th>User</th>
-                <th>Rating</th>
-                <th>Opinion</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($ratings as $rating)
+<div class="row card p-5 shadow">
+    <!-- DataTables Example -->
+    <div class="col-md-12">
+        <table class="table table-bordered" id="usersTable" width="100%" cellspacing="0">
+            <thead>
                 <tr>
-                    <td>{{ $rating->id }}</td>
-                    <td>{{ $rating->pameran->title }}</td>
-                    <td>{{ $rating->user->name }}</td>
-                    <td>{{ $rating->count }}</td>
-                    <td>{{ $rating->opinion }}</td>
-                    <td>
-                        <a href="{{ route('ratings.edit', $rating->id) }}" class="btn btn-primary btn-sm">Edit</a>
-                        <form action="{{ route('ratings.destroy', $rating->id) }}" method="POST" class="d-inline">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this rating?')">Delete</button>
-                        </form>
-                    </td>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Pameran</th>
+                    <th>Rating</th>
                 </tr>
-            @endforeach
-        </tbody>
-    </table>
+            </thead>
+        </table>
+    </div>
+</div>
+
+@endsection
+
+@section('scripts')
+<!-- Include DataTables JS -->
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        var jumlahRating = "{{$jumlahRating}}";
+        var rataRata = "{{$rataRata}}";
+        new DataTable('#usersTable', {
+            processing: true,
+            serverSide: true,
+            ajax: "{{ route('ratings.data') }}",
+            columns: [{
+                    data: 'id',
+                    name: 'id'
+                },
+                {
+                    data: 'user.name',
+                    name: 'name'
+                },
+                {
+                    data: 'pameran.title',
+                    name: 'pameran.title'
+                },
+                {
+                    data: 'count',
+                    name: 'count',
+                    orderable: false,
+                    searchable: false
+                }
+            ],
+            dom: 'Bfrtip',
+            buttons: [{
+                    extend: 'excel',
+                    text: 'Excel',
+                    className: 'btn btn-primary',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3],
+                    },
+                    messageBottom: `Total Rating: ${jumlahRating}\nRata-Rata Rating Pameran: ${rataRata}`
+
+                },
+                {
+                    extend: 'pdf',
+                    text: 'PDF',
+                    className: 'btn btn-primary',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3]
+                    },
+                    customize: function(doc) {
+
+                        doc.content.splice(0, 0, {
+
+                            text: `Total Rating: ${jumlahRating}\nRata-Rata Rating Pameran: ${rataRata}`,
+                            margin: [0, 0, 0, 12],
+                            alignment: 'left'
+                        });
+                        doc.content[2].table.widths = ['*', '*', '*', '*'];
+
+                    }
+                },
+                {
+                    extend: 'print',
+                    text: 'Print',
+                    className: 'btn btn-primary',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3]
+                    },
+                    customize: function(win) {
+                        $(win.document.body).prepend(`
+                        <div>
+                            <h3>Total Rating: ${jumlahRating}</h3>
+                            <h3>Rata-Rata Rating Pameran: ${rataRata}</h3>
+                        </div>
+                    `);
+                    }
+                }
+            ]
+        });
+    });
+</script>
 @endsection

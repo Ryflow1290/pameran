@@ -17,7 +17,7 @@ class PameranController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(['auth','isMahasiswa'])->except('show');
+        $this->middleware(['auth', 'isMahasiswa'])->except('show');
     }
 
     public function index()
@@ -28,7 +28,7 @@ class PameranController extends Controller
 
     public function data()
     {
-        $pamerans = Auth::user()->role == 'admin' ? Pameran::with('user', 'jurusan', 'files')->get() : Pameran::with('user', 'jurusan', 'files')->where('user_id', Auth::user()->id)->get();
+        $pamerans = Auth::user()->role == 'admin' ? Pameran::with('user','user.tahun', 'jurusan', 'files')->get() : Pameran::with('user','user.tahun', 'jurusan', 'files')->where('user_id', Auth::user()->id)->get();
         return DataTables::of($pamerans)
             ->addColumn('actions', function ($pameran) {
                 return '
@@ -65,14 +65,20 @@ class PameranController extends Controller
     }
 
     public function create()
-    {
+    {   
         $user = Auth::user();
+        $exists = User::find($user->id);
+        
+        
         $jurusans = Jurusan::all();
         if ($user->role == 'admin') {
 
-            $users = User::all();
+            $users = User::whereIn('role', ['mahasiswa', 'admin'])->get();
             return view('pameran.create')->with(compact('users'))->with(compact('jurusans'));
         } else {
+            if($exists->pamerans()->exists()){
+                return redirect()->route('pameran.index')->with('success', 'Tidak Dapat membuat Pameran Lebih Dari Satu');
+            }
             return view('pameran.create')->with(compact('jurusans'));
         }
     }
@@ -86,14 +92,19 @@ class PameranController extends Controller
             'file.*' => 'mimes:jpg,jpeg,png,mp4,pdf|max:10240',
             'caption.*' => 'required',
             'type.*' => 'required',
+            
         ]);
 
-
-
+        $role = Auth::user()->role;
+        if($role == 'admin' && Auth::user()->id != $request->input('user')){
+            if(User::find($request->input('user'))->pamerans()->exists()){
+                return redirect()->route('pameran.index')->with('success', 'User ini sudah memiliki Pameran!');
+            }
+        }
         // Store pameran
         $pameran = Pameran::create([
             'title' => $request->input('title'),
-            'user_id' => Auth::id(),
+            'user_id' =>  $role == 'admin' ? $request->input('user') : Auth::id(),
             'abstract' => $request->input('abstract'),
             'description' => $request->input('description'),
             'jurusan_id' => $request->input('jurusan')
@@ -101,7 +112,7 @@ class PameranController extends Controller
 
         if ($request->hasFile('file')) {
             foreach ($request->file('file') as $key => $file) {
-                $path = $file->store('public/pameran_files', 'public');
+                $path = $file->store('public/pameran', 'public');
                 $type = $file->getClientOriginalExtension();
                 $foto = ['jpeg', 'png', 'jpg'];
 
@@ -124,18 +135,18 @@ class PameranController extends Controller
     }
 
     public function show($id)
-    {   
+    {
         // if (session()->has('url.intended')) {
-            session()->put('url.intended', url()->current());
+        session()->put('url.intended', url()->current());
         // }
 
         $userId = null;
-        if(Auth::check()){
+        if (Auth::check()) {
 
             $userId = Auth::user()->id;
         }
 
-        $pameran = Pameran::with('files')->findOrFail($id);
+        $pameran = Pameran::with('files','user.tahun')->findOrFail($id);
 
         $alreadyRated = Rating::where('pameran_id', $id)->where('user_id', $userId)->exists();
 
@@ -152,13 +163,13 @@ class PameranController extends Controller
         if ($user->role == 'admin') {
 
             $pameran = Pameran::with('files', 'user', 'jurusan')->findOrFail($id);
-            $users = User::all();
+            $users = User::whereIn('role', ['mahasiswa', 'admin'])->get();
             return view('pameran.edit', compact('pameran'))->with(compact('users'))->with(compact('jurusans'));
         } else {
 
             $pameran = Pameran::with('files', 'user', 'jurusan')->where('user_id', $user->id)->findOrFail($id);
             $users = User::all();
-            return view('pameran.edit', compact('pameran'))->with(compact('users'))->with(compact('jurusans'));
+            return view('pameran.edit', compact('pameran'))->with(compact('jurusans'));
         }
     }
 
@@ -220,7 +231,7 @@ class PameranController extends Controller
 
         if ($request->hasFile('file')) {
             foreach ($request->file('file') as $key => $file) {
-                $path = $file->store('public/pameran_files', 'public');
+                $path = $file->store('public/pameran', 'public');
                 $type = $file->getClientOriginalExtension();
                 $foto = ['jpeg', 'png', 'jpg'];
 

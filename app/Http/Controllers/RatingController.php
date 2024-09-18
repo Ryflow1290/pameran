@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Rating;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Yajra\DataTables\Facades\DataTables;
 
 class RatingController extends Controller
 {
@@ -21,17 +22,39 @@ class RatingController extends Controller
         $user = Auth::user();
         if ($user->role == 'admin') {
             $ratings = Rating::with('pameran', 'user')->get();
-            return view('ratings.index', compact('ratings'));
+            $jumlahRating = $ratings->count();
+            $sumRating = $ratings->sum('count');
+            $rataRata = $jumlahRating > 0 ? $sumRating / $jumlahRating : 0;
+            return view('ratings.index', compact('ratings', 'jumlahRating', 'rataRata'));
         } else {
             $ratings = Rating::with(['pameran', 'user'])
                 ->whereHas('pameran', function ($query) use ($user) {
                     $query->where('user_id', $user->id);
                 })
                 ->get();
-            return view('ratings.index', compact('ratings'));
+            $jumlahRating = $ratings->count();
+            $sumRating = $ratings->sum('count');
+            $rataRata = $jumlahRating > 0 ? $sumRating / $jumlahRating : 0;
+            return view('ratings.index', compact('ratings', 'jumlahRating', 'rataRata'));
         }
     }
-
+    public function data()
+    {
+        $user = Auth::user();
+        if ($user->role == 'admin') {
+            $ratings = Rating::with('pameran', 'user')->get();
+            return DataTables::of($ratings)
+                ->make(true);
+        } else {
+            $ratings = Rating::with(['pameran', 'user'])
+                ->whereHas('pameran', function ($query) use ($user) {
+                    $query->where('user_id', $user->id);
+                })
+                ->get();
+            return DataTables::of($ratings)
+                ->make(true);
+        }
+    }
     /**
      * Show the form for editing a specific rating.
      */
