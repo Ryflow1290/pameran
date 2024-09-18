@@ -35,12 +35,13 @@ class LoginController extends Controller
      */
     public function __construct()
     {
+
         $this->middleware('guest')->except('logout');
     }
 
     protected function redirectTo()
     {
         session()->flash('success', 'You are logged in!');
-        return $this->redirectTo;
+        return session()->pull('url.intended', $this->redirectTo);
     }
 }

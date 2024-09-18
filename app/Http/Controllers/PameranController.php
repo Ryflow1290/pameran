@@ -124,7 +124,11 @@ class PameranController extends Controller
     }
 
     public function show($id)
-    {
+    {   
+        // if (session()->has('url.intended')) {
+            session()->put('url.intended', url()->current());
+        // }
+
         $userId = null;
         if(Auth::check()){
 
