@@ -151,8 +151,8 @@ class PameranController extends Controller
 
         $alreadyRated = Rating::where('pameran_id', $id)->where('user_id', $userId)->exists();
         
-        $isRatingOn = GlobalConfig::where('key','isRatingOn')->first();
-        $isRatingOn = $isRatingOn->value == 'on' && !empty($isRatingOn) ? true : false;
+        $isRatingOnConfig = GlobalConfig::where('key', 'isRatingOn')->first();
+    $isRatingOn = $isRatingOnConfig ? $isRatingOnConfig->value === 'on' : false;
         $ratings = Rating::with('user')->where('pameran_id', $id)->get();
 
         $jumlahRating = $ratings->count();
