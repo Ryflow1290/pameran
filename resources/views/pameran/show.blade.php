@@ -310,6 +310,7 @@
                 @endguest
                 <hr>
                 @foreach($ratings as $r)
+                @if( Auth::check())
                     @if(Auth::user()->id == $r->user_id)
                     <div class="py-1 col-lg-6">
                         <div class="card">
@@ -318,7 +319,6 @@
                                 <span class="rated">☆</span>
                                 @endfor
                             </div>
-                            @if( Auth::check())
                                 @if(Auth::user()->id == $r->user_id)
                                 <div class="card-footer">
                                     <form action="{{ route('ratings.destroy', $r->id) }}" method="POST" class="d-inline">
@@ -328,9 +328,9 @@
                                     </form>
                                 </div>
                                 @endif
-                            @endif
+                            </div>
                         </div>
-                    </div>
+                        @endif
                     @endif
                 @endforeach
             </div>
