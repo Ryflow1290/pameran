@@ -146,10 +146,10 @@
 
                                         <select name="submittedType[]" id="{{$loop->iteration}}" class="form-control" disabled>
                                             <option value="image" @if($f->type == 'image') selected @endif>
-                                                Image Banner (png,jpg,jpeg)
+                                                Image Flyer (png,jpg,jpeg)
                                             </option>
                                             <option value="flyer" @if($f->type == 'flyer') selected @endif>
-                                                Flyer (pdf)
+                                                Laporan Tugas Akhir (pdf)
                                             </option>
                                             <option value="video" @if($f->type == 'video') selected @endif>
                                                 Video Demo (mp4)
@@ -193,10 +193,10 @@
                                         <label class="form-control-label" for="type-empty">Type</label>
                                         <select name="type[]" id="type-empty" class="form-control">
                                             <option value="image">
-                                                Image Banner (png,jpg,jpeg)
+                                                Image Flyer (png,jpg,jpeg)
                                             </option>
                                             <option value="flyer">
-                                                Flyer (pdf)
+                                                Laporan Tugas Akhir (pdf)
                                             </option>
                                             <option value="video">
                                                 Video Demo (mp4)
@@ -249,6 +249,9 @@
         $(key).remove()
     }
     $(document).ready(function() {
+        CKEDITOR.replace('abstract',{
+            versionCheck: false
+        });
         
         $('#addFiles').click(function() {
             var count = $("input[name^='file[]']").length
@@ -274,10 +277,10 @@
                                         ${count == 0 ? '<label class="form-control-label" for="type-empty">Type</label>' : ''}
                                         <select name="type[]" id="type-empty" class="form-control">
                                             <option value="image">
-                                                Image Banner (png,jpg,jpeg)
+                                                Image Flyer (png,jpg,jpeg)
                                             </option>
                                             <option value="flyer">
-                                                Flyer (pdf)
+                                                Laporan Tugas Akhir (pdf)
                                             </option>
                                             <option value="video">
                                                 Video Demo (mp4)

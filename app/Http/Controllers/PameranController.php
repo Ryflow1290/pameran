@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\GlobalConfig;
 use App\Models\Jurusan;
 use App\Models\Pameran;
 use App\Models\PameranFile;
@@ -149,11 +150,16 @@ class PameranController extends Controller
         $pameran = Pameran::with('files','user.tahun')->findOrFail($id);
 
         $alreadyRated = Rating::where('pameran_id', $id)->where('user_id', $userId)->exists();
-
-
+        
+        $isRatingOn = GlobalConfig::where('key','isRatingOn')->first();
+        $isRatingOn = $isRatingOn->value == 'on' && !empty($isRatingOn) ? true : false;
         $ratings = Rating::with('user')->where('pameran_id', $id)->get();
 
-        return view('pameran.show', compact('pameran', 'ratings', 'alreadyRated'));
+        $jumlahRating = $ratings->count();
+        $sumRating = $ratings->sum('count');
+        $rataRata = $jumlahRating > 0 ? $sumRating / $jumlahRating : 0;
+
+        return view('pameran.show', compact('pameran', 'ratings', 'alreadyRated', 'rataRata','isRatingOn'));
     }
 
     public function edit($id)

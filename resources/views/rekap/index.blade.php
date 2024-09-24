@@ -100,7 +100,7 @@
                     className: 'btn btn-primary',
                     orientation: 'landscape',
                     exportOptions: {
-                        columns: [0, 1, 2, 3, 4, 5]
+                        columns: [0, 1, 2, 3, 4, 5] 
                     },
                     customize: function(doc) {
                         doc.content.splice(0, 0, {

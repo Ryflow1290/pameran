@@ -48,4 +48,24 @@ class ProfileController extends Controller
 
         return redirect()->route('profile')->withSuccess('Profile updated successfully.');
     }
+
+    public function uploadFoto(Request $request)
+    {
+        $request->validate([
+            'photo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+        $login = Auth::user();
+
+        if ($request->hasFile('photo')) {
+            $photo = $request->file('photo');
+            $path = $photo->store('public/photo', 'public');
+            $user = User::findOrFail($login->id)->first();
+            $user->photo_path = $path;
+            $user->save();
+
+            return back()->with('success', 'Photo uploaded successfully.');
+        }
+
+        return back()->with('error', 'No photo uploaded.');
+    }
 }

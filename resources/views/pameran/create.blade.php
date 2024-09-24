@@ -79,10 +79,11 @@
                             <div class="col-lg-12">
                                 <div class="form-group">
                                     <label class="form-control-label" for="abstract">Abstrak<span class="small text-danger">*</span></label>
-                                    <textarea type="text" id="abstract" class="form-control" name="abstract" placeholder="Penelitian ini bertujuan" rows="20">{{old('abstract')}}</textarea>
+                                    <textarea id="abstract" class="form-control" name="abstract" placeholder="Penelitian ini bertujuan" rows="20">{{ old('abstract') }}</textarea>
                                 </div>
                             </div>
                         </div>
+
                         <div class="row">
                             <div class="col-lg-12">
                                 <div class="form-group">
@@ -136,10 +137,10 @@
                                         <label class="form-control-label" for="type-empty">Type</label>
                                         <select name="type[]" id="type-empty" class="form-control">
                                             <option value="image">
-                                                Image Banner (png,jpg,jpeg)
+                                                Image Flyer (png,jpg,jpeg)
                                             </option>
                                             <option value="flyer">
-                                                Flyer (pdf)
+                                                Laporan Tugas Akhir (pdf)
                                             </option>
                                             <option value="video">
                                                 Video Demo (mp4)
@@ -192,7 +193,10 @@
         $(key).remove()
     }
     $(document).ready(function() {
-
+        
+        CKEDITOR.replace('abstract',{
+            versionCheck: false
+        });
         $('#addFiles').click(function() {
             var count = $("input[name^='file[]']").length
             console.log(count);
@@ -217,10 +221,10 @@
                                         ${count == 0 ? '<label class="form-control-label" for="type-empty">Type</label>' : ''}
                                         <select name="type[]" id="type-empty" class="form-control">
                                             <option value="image">
-                                                Image Banner (png,jpg,jpeg)
+                                                Image Flyer (png,jpg,jpeg)
                                             </option>
                                             <option value="flyer">
-                                                Flyer (pdf)
+                                                Laporan Tugas Akhir (pdf)
                                             </option>
                                             <option value="video">
                                                 Video Demo (mp4)

@@ -141,6 +141,7 @@
                     <p>Cari ide atau publikasikan project kamu untuk inspirasi banyak orang.</p>
                     <div class="search-bar w-100">
                         <input type="text" class="form-control" id="search-input" placeholder="Cari Judul">
+                        <!-- <button class="btn btn-primary"></button> -->
                     </div>
                 </div>
             </div>

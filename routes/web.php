@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BannersController;
+use App\Http\Controllers\GlobalConfigController;
 use App\Http\Controllers\JurusanController;
 use App\Http\Controllers\PameranController;
 use App\Http\Controllers\RatingController;
@@ -57,9 +58,11 @@ Route::delete('ratings/{id}', [RatingController::class, 'destroy'])->name('ratin
 
 Route::patch('/banners/{id}/toggle-status', [BannersController::class, 'toggleStatus'])->name('banners.toggleStatus');
 
-
+Route::post('config/toggle',[GlobalConfigController::class,'toggle'])->name('config.toggle');
+Route::resource('config',GlobalConfigController::class);
 Route::get('/profile', 'ProfileController@index')->name('profile');
 Route::put('/profile', 'ProfileController@update')->name('profile.update');
+Route::post('/upload', 'ProfileController@uploadFoto')->name('profile.upload');
 
 Route::get('/about', function () {
     return view('about');

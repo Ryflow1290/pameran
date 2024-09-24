@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PAMERIN - Free SVGs</title>
+    <title>PAMERIN Indonusa</title>
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- jQuery -->
@@ -87,7 +87,7 @@
 
         .title {
             font-weight: bold;
-            font-size: 4rem;
+            font-size: 3rem;
         }
 
         .date {
@@ -211,12 +211,12 @@
 
             <div class="col-lg-8">
                 <div class="row d-flex flex-col">
-                    <div class="d-flex flex-row justify-content-between align-items-center ">
+                    <div class="d-flex flex-row justify-content-between align-items-start ">
                         <div class="title ">
                             {{$pameran->title}}
                         </div>
                         <div class="">
-                            <button class="btn btn-primary" onclick="Copy();" id="kopi">Salin Link </button>
+                            <button class="btn btn-primary" style="min-width: 100px; margin-left: 25px;" onclick="Copy();" id="kopi">Salin Link </button>
                         </div>
                     </div>
                     <div class="date">
@@ -267,60 +267,71 @@
         @endforeach
         <div class="">
             <h5>Abstract</h5>
-            <p>{{$pameran->abstract}}</p>
+            <p>{!! $pameran->abstract !!}</p>
         </div>
     </div>
     <div class="bg-white py-4">
         <div class="container">
             <div class="d-flex flex-column justify-content-center align-items-center">
                 <h4 class=""><strong>Rating</strong></h4>
+                <h1>@if($rataRata > 0) {{$rataRata}} / 5 @else Belum ada Rating @endif</h1>
                 @guest
                 Login First to rating :D
                 @else
-                @if(!$alreadyRated)
-                <div class="card px-4 d-flex justify-content-center mt-5 col-lg-4">
-                    <div class="text-center mb-5">
-                        <form action="{{ route('ratings.store', $pameran->id) }}" id="rating" method="POST" class="text-center rating">
-                            @csrf
-                            <input type="text" name="pameran_id" value="{{$pameran->id}}" hidden>
-                            <input type="radio" name="rating" value="5" id="5">
-                            <label for="5">☆</label> <input type="radio" name="rating" value="4" id="4">
-                            <label for="4">☆</label>
-                            <input type="radio" name="rating" value="3" id="3"><label for="3">☆</label>
-                            <input type="radio" name="rating" value="2" id="2"><label for="2">☆</label>
-                            <input type="radio" name="rating" value="1" id="1"><label for="1">☆</label>
-                        </form>
-                        <div class="buttons  mt-0">
-                            <button class="btn btn-primary" type="submit" form="rating">Submit</button>
+                    @if($isRatingOn)
+                        @if(!$alreadyRated)
+                        <div class="card px-4 d-flex justify-content-center mt-5 col-lg-4">
+                            <div class="text-center mb-5">
+                                <form action="{{ route('ratings.store', $pameran->id) }}" id="rating" method="POST" class="text-center rating">
+                                    @csrf
+                                    <input type="text" name="pameran_id" value="{{$pameran->id}}" hidden>
+                                    <input type="radio" name="rating" value="5" id="5">
+                                    <label for="5">☆</label> <input type="radio" name="rating" value="4" id="4">
+                                    <label for="4">☆</label>
+                                    <input type="radio" name="rating" value="3" id="3"><label for="3">☆</label>
+                                    <input type="radio" name="rating" value="2" id="2"><label for="2">☆</label>
+                                    <input type="radio" name="rating" value="1" id="1"><label for="1">☆</label>
+                                </form>
+                                <div class="buttons  mt-0">
+                                    <button class="btn btn-primary" type="submit" form="rating">Submit</button>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                @else
-                Sudah Rating :D
-                @endif
+                        @else
+                        Sudah Rating :D
+                        
+                        @endif
+                    @else
+
+                        Periode Rating Sudah Ditutup
+
+                    @endif
+
                 @endguest
                 <hr>
                 @foreach($ratings as $r)
-                <div class="py-1 col-lg-6">
-                    <div class="card">
-                        <div class="card-body "><strong>{{$r->user->name}}</strong>
-                            @for($i = $r->count; $i > 0; $i--)
-                            <span class="rated">☆</span>
-                            @endfor
+                    @if(Auth::user()->id == $r->user_id)
+                    <div class="py-1 col-lg-6">
+                        <div class="card">
+                            <div class="card-body "><strong>{{$r->user->name}}</strong>
+                                @for($i = $r->count; $i > 0; $i--)
+                                <span class="rated">☆</span>
+                                @endfor
+                            </div>
+                            @if( Auth::check())
+                                @if(Auth::user()->id == $r->user_id)
+                                <div class="card-footer">
+                                    <form action="{{ route('ratings.destroy', $r->id) }}" method="POST" class="d-inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this rating?')">Delete</button>
+                                    </form>
+                                </div>
+                                @endif
+                            @endif
                         </div>
-                        @if( Auth::check())
-                        @if(Auth::user()->id == $r->user_id)
-                        <div class="card-footer">
-                            <form action="{{ route('ratings.destroy', $r->id) }}" method="POST" class="d-inline">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this rating?')">Delete</button>
-                            </form>
-                        </div>
-                        @endif
-                        @endif
                     </div>
-                </div>
+                    @endif
                 @endforeach
             </div>
         </div>
