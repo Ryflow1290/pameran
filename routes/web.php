@@ -26,7 +26,7 @@ Route::get('/', function () {
     $banners = Banner::where('is_active', true)->get();
     $jurusans = Jurusan::with('pamerans.user', 'pamerans.files')->get();
     return view('welcome')->with(compact('jurusans'))->with(compact('banners'));
-});
+})->name('utama');
 
 Auth::routes();
 
