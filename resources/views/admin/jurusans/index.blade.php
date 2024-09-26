@@ -3,7 +3,7 @@
 @section('main-content')
 <!-- Page Heading -->
 <h1 class="h3 mb-4 text-gray-800">{{ __('Jurusan') }}</h1>
-
+<a href="{{route('jurusan.create')}}" class="btn btn-primary">Create</a>
 @if (session('success'))
 <div class="alert alert-success border-left-success alert-dismissible fade show" role="alert">
     {{ session('success') }}
