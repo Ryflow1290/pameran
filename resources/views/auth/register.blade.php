@@ -8,7 +8,13 @@
                 <div class="card-body p-0">
                     <div class="row">
                     <div class="col-lg-6 d-none d-lg-block p-4">
-                            <div class=" bg-login-image h-100"></div>
+                    <div class="d-flex flex-column justify-content-center align-items-center h-100">
+                                <img src="{{asset('img/favicon.png')}}" style="max-height: 200px;" alt="">
+                                <div style="text-align: center; font-size: xx-large; font-weight: 800;">
+                                    PAMERIN <br>
+                                    Pameran Indonusa
+                                </div>
+                            </div>
                         </div>
                         <div class="col-lg-6">
                             <div class="p-5">
