@@ -103,7 +103,7 @@
                 </div>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
+                <span class="navbar-toggler-icon" style="fill: white;"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
@@ -139,7 +139,7 @@
                     </div>
                 </div>
                 <div class="col-lg-6">
-                    <img width="400" height="" src="https://1.bp.blogspot.com/-n31dgQ6nBUE/XTnHqaWJZ8I/AAAAAAAAAHM/TUrWRPQezHQV6I8RPP8c2uUZCqfvAdpwgCLcBGAs/s1600/2.INDONUSA.png" alt="">
+                    <img width="300" height="" src="https://1.bp.blogspot.com/-n31dgQ6nBUE/XTnHqaWJZ8I/AAAAAAAAAHM/TUrWRPQezHQV6I8RPP8c2uUZCqfvAdpwgCLcBGAs/s1600/2.INDONUSA.png" alt="">
                 </div>
             </div>
         </div>
