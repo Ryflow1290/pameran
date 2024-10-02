@@ -94,6 +94,19 @@
                                     </select>
                                 </div>
                             </div>
+                            <div class="col-lg-4">
+                                <div class="form-group focused">
+                                    <label class="form-control-label" for="tahun_lulus">Current Tahun Lulus</label>
+                                    <select name="tahun_lulus" id="tahun_lulus" class="form-control">
+                                        @if($user->tahun_lulus)
+                                        <option class="bg-warning" value="{{ $user->tahun_lulus }}" selected>{{ $user->tahun_lulus->year }}</option>
+                                        @endif
+                                        @foreach($tahun_lulus as $t)
+                                        <option value="{{$t->id }}">{{$t->year }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
                         </div>
                         <div class="row">
                             <div class="col-lg-4">

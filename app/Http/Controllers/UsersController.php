@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exports\UsersTemplateExport;
 use App\Imports\UsersImport;
 use App\Models\Jurusan;
+use App\Models\TahunLulus;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -69,10 +70,11 @@ class UsersController extends Controller
             return redirect()->route('users.index')->with('error', 'User not found.');
         }
 
+        $tahun_lulus = TahunLulus::all();
         $jurusan = Jurusan::all();
 
         // Return the view with the user's data
-        return view('admin.users.edit')->with(compact('user'))->with(compact('jurusan'));
+        return view('admin.users.edit')->with(compact('user'))->with(compact('jurusan'))->with(compact('tahun_lulus'));
     }
 
     public function updateUsersData(Request $request, $id)
@@ -98,6 +100,8 @@ class UsersController extends Controller
             'last_name' => $request->input('last_name'),
             'email' => $request->input('email'),
             'role' => $request->input('role'),
+            'tahun_lulus' => $request->input('tahun_lulus'),
+            'jurusan_id' => $request->input('jurusan')
         ]);
 
         if ($request->input('new_password') != '') {

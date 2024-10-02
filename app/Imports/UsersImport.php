@@ -25,7 +25,7 @@ class UsersImport implements ToCollection, WithHeadingRow
 
             User::updateOrCreate([ 
                 'email' => $row['email']
-            ], [
+            ], [    
                 'last_name' => $row['last_name'],
                 'name' => $row['name'],
                 'nim' => $row['nim'],

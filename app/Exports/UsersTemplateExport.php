@@ -12,8 +12,8 @@ class UsersTemplateExport implements FromArray, WithHeadings
     public function array(): array
     {
         return [
-            ['John',' Doe', 'john.doe@example.com', '12345', '2024', '2024'],
-            ['Jane','Smith', 'jane.smith@example.com', '67890', '2023', '2023'],
+            ['John',' Doe', 'john.doe@example.com', '12345', '2024', '2024','12345678'],
+            ['Jane','Smith', 'jane.smith@example.com', '67890', '2023', '2023','12345678'],
         ];
     }
 
@@ -26,6 +26,7 @@ class UsersTemplateExport implements FromArray, WithHeadings
             'nim',
             'tahun_lulus',
             'year',
+            'password'
         ];
     }
 }
