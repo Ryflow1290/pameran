@@ -24,6 +24,8 @@ class User extends Authenticatable
         'role',
         'nim',
         'tahun_lulus',
+        'jurusan_id',
+        'photo_path',
         
     ];
 
