@@ -93,7 +93,7 @@ class UsersController extends Controller
         if (!$user) {
             return redirect()->route('users')->with('error', 'User not found.');
         }
-
+        dd($request);
         // Update the user data
         $user->update([
             'name' => $request->input('name'),
