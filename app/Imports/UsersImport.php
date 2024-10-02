@@ -30,7 +30,7 @@ class UsersImport implements ToCollection, WithHeadingRow
                 'name' => $row['name'],
                 'nim' => $row['nim'],
                 'tahun_lulus' => $tahunLulus->id,
-                'password' => $row['name'].$row['nim'],
+                'password' => $row['password'] ?? $row['name'].$row['nim'],
                 'role' => 'mahasiswa',
             ]);
         }
