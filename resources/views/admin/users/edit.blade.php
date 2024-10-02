@@ -36,7 +36,7 @@
 
             <div class="card-body">
 
-                <form method="POST" action="{{ route('users.edit', $user->id) }}" autocomplete="off">
+                <form method="POST" action="{{ route('users.patch', $user->id) }}" autocomplete="off">
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
                     <input type="hidden" name="_method" value="PUT">

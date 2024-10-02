@@ -39,7 +39,7 @@ Route::post('/users/import', 'UsersController@import')->name('users.import');
 Route::get('/admin/users/template', 'UsersController@downloadTemplate')->name('users.template');
 
 Route::get('/users/edit/{id}', 'UsersController@editUsersData')->name('users.edit');
-Route::put('/users/edit/{id}', 'UsersController@updateUsersData')->name('users.edit');
+Route::put('/users/edit/{id}', 'UsersController@updateUsersData')->name('users.patch');
 Route::get('/users/delete/{id}', 'UsersController@deleteUsersData')->name('users.delete');
 Route::get('/rekap', 'RekapController@index')->name('rekap');
 Route::get('/rekap/data', 'RekapController@data')->name('rekap.data');
