@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Pameran;
 use App\Models\Rating;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -21,38 +22,35 @@ class RatingController extends Controller
     {
         $user = Auth::user();
         if ($user->role == 'admin') {
-            $ratings = Rating::with('pameran', 'user')->get();
-            $jumlahRating = $ratings->count();
-            $sumRating = $ratings->sum('count');
-            $rataRata = $jumlahRating > 0 ? $sumRating / $jumlahRating : 0;
-            return view('ratings.index', compact('ratings', 'jumlahRating', 'rataRata'));
+            $pamerans = Pameran::with('likes')->get();
+            return view('ratings.index', compact('pamerans'));
         } else {
-            $ratings = Rating::with(['pameran', 'user'])
-                ->whereHas('pameran', function ($query) use ($user) {
-                    $query->where('user_id', $user->id);
-                })
-                ->get();
-            $jumlahRating = $ratings->count();
-            $sumRating = $ratings->sum('count');
-            $rataRata = $jumlahRating > 0 ? $sumRating / $jumlahRating : 0;
-            return view('ratings.index', compact('ratings', 'jumlahRating', 'rataRata'));
+            $pamerans = Pameran::with('likes')->get();
+            return view('ratings.index', compact('pamerans'));
         }
     }
     public function data()
     {
         $user = Auth::user();
         if ($user->role == 'admin') {
-            $ratings = Rating::with('pameran', 'user')->get();
-            return DataTables::of($ratings)
+            $pamerans = Pameran::with('user')->withCount('likes')->get();
+
+            return DataTables::of($pamerans)
+                ->addColumn('likes_count', function ($pameran) {
+                    return $pameran->likes_count;
+                })
                 ->make(true);
         } else {
-            $ratings = Rating::with(['pameran', 'user'])
-                ->whereHas('pameran', function ($query) use ($user) {
-                    $query->where('user_id', $user->id);
-                })
+            $pamerans = Pameran::with('user')->withCount('likes')
+                ->where('user_id', $user->id)
                 ->get();
-            return DataTables::of($ratings)
+
+            return DataTables::of($pamerans)
+                ->addColumn('likes_count', function ($pameran) {
+                    return $pameran->likes_count;
+                })
                 ->make(true);
+
         }
     }
     /**

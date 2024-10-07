@@ -14,9 +14,9 @@
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Name</th>
-                    <th>Pameran</th>
-                    <th>Rating</th>
+                    <th>Nama Pameran</th>
+                    <th>Nama Author</th>
+                    <th>Perolehan</th>
                 </tr>
             </thead>
         </table>
@@ -30,8 +30,6 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
-        var jumlahRating = "{{$jumlahRating}}";
-        var rataRata = "{{$rataRata}}";
         new DataTable('#usersTable', {
             processing: true,
             serverSide: true,
@@ -41,17 +39,17 @@
                     name: 'id'
                 },
                 {
+                    data: 'title',
+                    name: 'title'
+                },
+                {
                     data: 'user.name',
-                    name: 'name'
+                    name: 'user.name'
                 },
                 {
-                    data: 'pameran.title',
-                    name: 'pameran.title'
-                },
-                {
-                    data: 'count',
-                    name: 'count',
-                    orderable: false,
+                    data: 'likes_count',
+                    name: 'likes_count',
+                    orderable: true,
                     searchable: false
                 }
             ],
@@ -63,7 +61,7 @@
                     exportOptions: {
                         columns: [0, 1, 2, 3],
                     },
-                    messageBottom: `Total Rating: ${jumlahRating}\nRata-Rata Rating Pameran: ${rataRata}`
+                    // messageBottom: `Total Rating: ${jumlahRating}\nRata-Rata Rating Pameran: ${rataRata}`
 
                 },
                 {
@@ -75,13 +73,13 @@
                     },
                     customize: function(doc) {
 
-                        doc.content.splice(0, 0, {
+                    //     doc.content.splice(0, 0, {
 
-                            text: `Total Rating: ${jumlahRating}\nRata-Rata Rating Pameran: ${rataRata}`,
-                            margin: [0, 0, 0, 12],
-                            alignment: 'left'
-                        });
-                        doc.content[2].table.widths = ['*', '*', '*', '*'];
+                    //         text: `Total Rating: ${jumlahRating}\nRata-Rata Rating Pameran: ${rataRata}`,
+                    //         margin: [0, 0, 0, 12],
+                    //         alignment: 'left'
+                    //     });
+                        doc.content[1].table.widths = ['*', '*', '*', '*'];
 
                     }
                 },
@@ -92,14 +90,14 @@
                     exportOptions: {
                         columns: [0, 1, 2, 3]
                     },
-                    customize: function(win) {
-                        $(win.document.body).prepend(`
-                        <div>
-                            <h3>Total Rating: ${jumlahRating}</h3>
-                            <h3>Rata-Rata Rating Pameran: ${rataRata}</h3>
-                        </div>
-                    `);
-                    }
+                    // customize: function(win) {
+                    //     $(win.document.body).prepend(`
+                    //     <div>
+                    //         <h3>Total Rating: ${jumlahRating}</h3>
+                    //         <h3>Rata-Rata Rating Pameran: ${rataRata}</h3>
+                    //     </div>
+                    // `);
+                    // }
                 }
             ]
         });
