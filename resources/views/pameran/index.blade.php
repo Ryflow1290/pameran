@@ -27,7 +27,10 @@
 
 </div>
 <div class="row card p-5 shadow">
+    @if(Auth::user()->role == 'admin')
 
+    <a href="{{ route('pameran.data_mahasiswa') }}" class="btn btn-primary mb-2">Rekap Pameran Mahasiswa</a>
+    @endif
     <!-- DataTables Example -->
     <div class="col-md-12">
         <table class="table table-bordered" id="usersTable" width="100%" cellspacing="0">
@@ -54,8 +57,9 @@
 @endsection
 
 @section('scripts')
-<!-- Include DataTables JS -->
 
+
+<!-- Include DataTables JS -->
 <script type="text/javascript">
     $(document).ready(function() {
         var base = '{{url("")}}' + '{{Storage::url("public/")}}';
@@ -111,73 +115,7 @@
                         searchable: false
                     },
                 ],
-                dom: 'Bfrtip', // Define where the buttons will be placed ('B' means buttons)
-                buttons: [{
-                        extend: 'excel',
-                        className: 'btn btn-primary',
-                        text: 'Excel',
-                        exportOptions: {
-                            format: {
-                                body: function(data, row, column, node) {
-                                    if (column === 8) { // The hidden files column
-                                        if (Array.isArray(data)) {
-                                            return data.map(file => base + file.path).join(', ');
-
-                                        } else if (data && typeof data === 'object') {
-                                            return data.path;
-                                        }
-                                    }
-                                    return data;
-                                }
-                            },
-                            columns: [0, 1, 2, 3, 4, 6, 7,8]
-                        }
-                    },
-                    {
-                        extend: 'pdf',
-                        className: 'btn btn-primary',
-                        text: 'PDF',
-                        orientation: 'landscape',
-                        pageSize: 'LEGAL',
-                        exportOptions: {
-                            format: {
-                                body: function(data, row, column, node) {
-                                    if (column === 8) { // The hidden files column
-                                        if (Array.isArray(data)) {
-                                            return data.map(file => $(`<a href="${base + file.path}">`).text(base + file.path).html()).join(', ');
-                                        } else if (data && typeof data === 'object') {
-                                            return data.path;
-                                        }
-                                    }
-                                    return data
-                                }
-                            },
-                            columns: [0, 1, 2, 3, 4, 5, 7,8]
-                        }
-                    },
-                    {
-                        extend: 'print',
-                        className: 'btn btn-primary',
-                        text: 'Print',
-                        exportOptions: {
-                            format: {
-                                body: function(data, row, column, node) {
-                                    if (column === 8) { // The hidden files column
-                                        if (Array.isArray(data)) {
-                                            return data.map(file => base + file.path).join(', ');
-
-                                        } else if (data && typeof data === 'object') {
-                                            return data.path;
-                                        }
-                                    }
-                                    return data;
-                                }
-                            },
-                            columns: [0, 1, 2, 3, 4, 6, 7,8]
-                        }
-                    }
-                ]
             });
-    });
+    })
 </script>
 @endsection

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\UsersPameranExport;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Models\GlobalConfig;
 use App\Models\Jurusan;
 use App\Models\Pameran;
@@ -29,7 +31,7 @@ class PameranController extends Controller
 
     public function data()
     {
-        $pamerans = Auth::user()->role == 'admin' ? Pameran::with('user','user.tahun', 'jurusan', 'files')->get() : Pameran::with('user','user.tahun', 'jurusan', 'files')->where('user_id', Auth::user()->id)->get();
+        $pamerans = Auth::user()->role == 'admin' ? Pameran::with('user', 'user.tahun', 'jurusan', 'files')->get() : Pameran::with('user', 'user.tahun', 'jurusan', 'files')->where('user_id', Auth::user()->id)->get();
         return DataTables::of($pamerans)
             ->addColumn('actions', function ($pameran) {
                 return '
@@ -45,7 +47,7 @@ class PameranController extends Controller
                 <span aria-hidden="true">×</span>
             </button>
         </div>
-        <div class="modal-body">Delete "' . $pameran->name . '" !.</div>
+        <div class="modal-body">Delete ' . $pameran->title . ' !.</div>
         <div class="modal-footer">
         <form id="" action="' . route('pameran.destroy', $pameran->id) . '" method="POST" style="">
                                 <input type="hidden" name="_token" value="' . csrf_token() . '">
@@ -65,19 +67,24 @@ class PameranController extends Controller
             ->make(true);
     }
 
+    public function data_mahasiswa()
+    {
+        return Excel::download(new UsersPameranExport, 'data_mahsiswa_rekap_pameran.xlsx');
+    }
+
     public function create()
-    {   
+    {
         $user = Auth::user();
         $exists = User::find($user->id);
-        
-        
+
+
         $jurusans = Jurusan::all();
         if ($user->role == 'admin') {
 
             $users = User::whereIn('role', ['mahasiswa', 'admin'])->get();
             return view('pameran.create')->with(compact('users'))->with(compact('jurusans'));
         } else {
-            if($exists->pamerans()->exists()){
+            if ($exists->pamerans()->exists()) {
                 return redirect()->route('pameran.index')->with('success', 'Tidak Dapat membuat Pameran Lebih Dari Satu');
             }
             return view('pameran.create')->with(compact('jurusans'));
@@ -93,12 +100,12 @@ class PameranController extends Controller
             'file.*' => 'mimes:jpg,jpeg,png,mp4,pdf|max:10240',
             'caption.*' => 'required',
             'type.*' => 'required',
-            
+
         ]);
 
         $role = Auth::user()->role;
-        if($role == 'admin' && Auth::user()->id != $request->input('user')){
-            if(User::find($request->input('user'))->pamerans()->exists()){
+        if ($role == 'admin' && Auth::user()->id != $request->input('user')) {
+            if (User::find($request->input('user'))->pamerans()->exists()) {
                 return redirect()->route('pameran.index')->with('success', 'User ini sudah memiliki Pameran!');
             }
         }
@@ -147,19 +154,19 @@ class PameranController extends Controller
             $userId = Auth::user()->id;
         }
 
-        $pameran = Pameran::with('files','user.tahun')->findOrFail($id);
+        $pameran = Pameran::with('files', 'user.tahun')->findOrFail($id);
 
         $alreadyRated = Rating::where('pameran_id', $id)->where('user_id', $userId)->exists();
-        
+
         $isRatingOnConfig = GlobalConfig::where('key', 'isRatingOn')->first();
-    $isRatingOn = $isRatingOnConfig ? $isRatingOnConfig->value === 'on' : false;
+        $isRatingOn = $isRatingOnConfig ? $isRatingOnConfig->value === 'on' : false;
         $ratings = Rating::with('user')->where('pameran_id', $id)->get();
 
         $jumlahRating = $ratings->count();
         $sumRating = $ratings->sum('count');
         $rataRata = $jumlahRating > 0 ? $sumRating / $jumlahRating : 0;
 
-        return view('pameran.show', compact('pameran', 'ratings', 'alreadyRated', 'rataRata','isRatingOn'));
+        return view('pameran.show', compact('pameran', 'ratings', 'alreadyRated', 'rataRata', 'isRatingOn'));
     }
 
     public function edit($id)

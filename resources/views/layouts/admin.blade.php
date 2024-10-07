@@ -81,13 +81,16 @@
                     <span>{{ __('Pameran') }}</span></a>
             </li>
 
+            
+            @endif
+            @if(Auth::user()->role == 'admin')
+            
             <li class="nav-item {{ Nav::isRoute('ratings.*') }}">
                 <a class="nav-link" href="{{ route('ratings.index') }}">
                     <i class="fas fa-fw fa-star"></i>
                     <span>{{ __('Ratings') }}</span></a>
             </li>
-            @endif
-            @if(Auth::user()->role == 'admin')
+
             <li class="nav-item {{ Nav::isRoute('users') }}">
                 <a class="nav-link" href="{{ route('users') }}">
                     <i class="fas fa-fw fa-users"></i>

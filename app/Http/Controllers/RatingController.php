@@ -13,7 +13,7 @@ class RatingController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('isMahasiswa')->except('store', 'destroy');
+        $this->middleware('isAdmin')->except('store', 'destroy');
     }
     /**
      * Display a listing of the ratings (for admin).

@@ -43,6 +43,7 @@ Route::put('/users/edit/{id}', 'UsersController@updateUsersData')->name('users.p
 Route::get('/users/delete/{id}', 'UsersController@deleteUsersData')->name('users.delete');
 Route::get('/rekap', 'RekapController@index')->name('rekap');
 Route::get('/rekap/data', 'RekapController@data')->name('rekap.data');
+Route::get('/pameran/data_mahasiswa', [PameranController::class, 'data_mahasiswa'])->name('pameran.data_mahasiswa')->middleware('isAdmin');
 Route::get('/pameran/data', [PameranController::class, 'data'])->name('pameran.data');
 Route::get('/jurusan/data', [JurusanController::class, 'data'])->name('jurusan.data');
 Route::resource('pameran', PameranController::class);
