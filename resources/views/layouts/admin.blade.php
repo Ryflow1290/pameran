@@ -59,8 +59,8 @@
                     <img src="{{asset('/img/favicon.png')}}" width="40" alt="">
                 </div>
                 <div style="display: flex; flex-direction: column; justify-content: start; width: 100%;">
-                    <div class="sidebar-brand-text">PAMERIN</div>
-                    <div class="" style="font-size: 50%;">Pameran Indonusa</div>
+                    <div class="sidebar-brand-text">{{env('APP_NAME') ?? 'SIPATA'}}</div>
+                    <!-- <div class="" style="font-size: 50%;">Pameran Indonusa</div> -->
                 </div>
             </a>
 

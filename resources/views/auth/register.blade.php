@@ -11,8 +11,7 @@
                     <div class="d-flex flex-column justify-content-center align-items-center h-100">
                                 <img src="{{asset('img/favicon.png')}}" style="max-height: 200px;" alt="">
                                 <div style="text-align: center; font-size: xx-large; font-weight: 800;">
-                                    PAMERIN <br>
-                                    Pameran Indonusa
+                                    <div>{{env('APP_NAME') ?? 'SIPATA'}}</div>
                                 </div>
                             </div>
                         </div>

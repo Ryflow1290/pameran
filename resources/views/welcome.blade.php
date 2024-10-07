@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pamerin</title>
+    <title>{{env('APP_NAME') ?? 'SIPATA'}}</title>
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- jQuery -->
@@ -98,8 +98,7 @@
             <a href="{{route('utama')}}" style="display: flex; gap: 8px;" class="navbar-brand">
                 <img src="{{asset('img/favicon.png')}}" style="max-height: 60px;" alt="">
                 <div style="display: flex; flex-direction: column; gap: 0px; align-items: start; justify-content: center;">
-                    <div >Pamerin</div>
-                    <div style="color: whitesmoke; font-size: 70%;">Pameran Indonusa</div>
+                <div>{{env('APP_NAME') ?? 'SIPATA'}}</div>
                 </div>
             </a>
             <button class="navbar-toggler bg-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -132,7 +131,7 @@
             <div class="row">
 
                 <div class="col-lg-6 d-flex flex-column justify-content-center">
-                    <h1>Pamerin Tugas Akhir Kamu Di Sini                    </h1>
+                    <h1>Sistem Informasi Pameran Tugas Akhir                    </h1>
                     <p>Cari ide atau publikasikan tugas akhir kamu untuk inspirasi banyak orang.                    </p>
                     <div class="search-bar w-100">
                         <input type="text" class="form-control" placeholder="Cari Judul" onkeyup="window.location='/project'">
