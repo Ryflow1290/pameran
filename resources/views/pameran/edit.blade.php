@@ -144,7 +144,7 @@
                                         <label class="form-control-label" for="type0">Type</label>
                                         @endif
 
-                                        <select name="submittedType[]" id="{{$loop->iteration}}" class="form-control" disabled>
+                                        <select name="submittedType[]" id="{{$loop->iteration}}" class="form-control" readonly>
                                             <option value="image" @if($f->type == 'image') selected @endif>
                                                 Image Flyer (png,jpg,jpeg)
                                             </option>

@@ -126,11 +126,24 @@
                         <a class="nav-link" href="/project">Semua</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{route('login')}}">@guest
+                    @guest
+                        <a class="nav-link" href="{{route('login')}}">
                             Login
-                            @else
+                        </a>
+                        @else
+                        @if(Auth::user()->role == 'pengunjung')
+                        <a href="">
+                            <a class="btn btn-danger" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">{{ __('Logout') }}</a>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                @csrf
+                            </form>
+                        </a>
+                        @else
+                        <a class="nav-link" href="{{route('login')}}">
                             Dashboard
-                            @endguest</a>
+                        </a>
+                        @endif
+                        @endguest
                     </li>
                 </ul>
             </div>

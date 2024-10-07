@@ -10,6 +10,7 @@ use App\Models\Pameran;
 use App\Models\PameranFile;
 use App\Models\Rating;
 use App\Models\User;
+use App\Rules\ValidTypeSelection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -101,7 +102,14 @@ class PameranController extends Controller
             'caption.*' => 'required',
             'type.*' => 'required',
 
-        ]);
+        ],);
+        $types = $request->input('type');
+        $hasFlyer = in_array('flyer', $types);
+        $hasPdf = in_array('image', $types);
+
+        if (!$hasFlyer || !$hasPdf) {
+            return back()->withErrors(['type' => 'You must select at least one flyer and one pdf type.'])->withInput();
+        }
 
         $role = Auth::user()->role;
         if ($role == 'admin' && Auth::user()->id != $request->input('user')) {
@@ -197,8 +205,24 @@ class PameranController extends Controller
             'captionSubmitted' => 'nullable',
             'caption.*' => 'required',
             'type.*' => 'required',
-            // 'submittedType.*' => 'required'
+            'submittedType' => 'nullable'
         ]);
+        
+        $submittedTypes = $request->input('submittedType');
+        $types = $request->input('type');
+
+        $allTypes = array_merge($submittedTypes, $types);
+
+        $hasFlyer = in_array('flyer', $allTypes);
+        $hasImage = in_array('image', $allTypes);
+
+        if (!$hasFlyer || !$hasImage) {
+            return back()->withErrors(['type' => 'You must select at least one flyer and one image type.'])->withInput();
+        }
+
+
+
+
 
         $user = Auth::user();
 
