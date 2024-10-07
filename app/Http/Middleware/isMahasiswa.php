@@ -18,7 +18,7 @@ class isMahasiswa
         if (auth()->check() && (auth()->user()->role === 'admin' || auth()->user()->role === 'mahasiswa')) {
             return $next($request);
         }
-
-        abort(403);
+        
+        return redirect('/');
     }
 }
