@@ -210,8 +210,7 @@ class PameranController extends Controller
         
         $submittedTypes = $request->input('submittedType');
         $types = $request->input('type');
-
-        $allTypes = array_merge($submittedTypes, $types);
+        $allTypes = array_merge($submittedTypes ?? [], $types ?? []);
 
         $hasFlyer = in_array('flyer', $allTypes);
         $hasImage = in_array('image', $allTypes);
@@ -219,10 +218,6 @@ class PameranController extends Controller
         if (!$hasFlyer || !$hasImage) {
             return back()->withErrors(['type' => 'You must select at least one flyer and one image type.'])->withInput();
         }
-
-
-
-
 
         $user = Auth::user();
 

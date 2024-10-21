@@ -191,7 +191,7 @@
                                 <div class="col-lg-4">
                                     <div class="form-group focused">
                                         <label class="form-control-label" for="type-empty">Type</label>
-                                        <select name="type[]" id="type-empty" class="form-control">
+                                        <select name="type[]" id="type-empty" class="form-control" >
                                             <option value="image">
                                                 Image Flyer (png,jpg,jpeg)
                                             </option>
