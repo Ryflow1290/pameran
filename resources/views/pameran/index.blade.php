@@ -63,7 +63,9 @@
 <script type="text/javascript">
     $(document).ready(function() {
         var base = '{{url("")}}' + '{{Storage::url("public/")}}';
-
+        var sub = '{{$submittedCount}}'
+        var notsub = '{{$notSubmittedCount}}'
+        var tot = '{{$totalCount}}'
         new DataTable(
             '#usersTable', {
                 processing: true,
@@ -115,6 +117,36 @@
                         searchable: false
                     },
                 ],
+                dom: 'Bfrtip',
+                buttons: [
+                    {
+                        extend: 'pdf',
+                        className: 'btn btn-primary',
+                        text: 'PDF',
+                        orientation: 'landscape',
+                        pageSize: 'LEGAL',
+                        
+                        exportOptions: {
+
+                            format: {
+                                body: function(data, row, column, node) {
+                                    text = `Sudah Mengumpulkan \t: ${sub} \nBelum Mengumpulkan \t:${notsub} \nTotal Mahasiswa \t: ${tot}`
+
+                                    if (column === 8) { // The hidden files column
+                                        if (Array.isArray(data)) {
+                                            return data.map(file => $(`<a href="${base + file.path}">`).text(base + file.path).html()).join(', ');
+                                        } else if (data && typeof data === 'object') {
+                                            return data.path;
+                                        }
+                                    }
+                                    return data
+                                }
+                            },
+                            columns: [0, 1, 2, 3, 4, 5, 7, 8]
+                        }
+                    },
+                    
+                ]
             });
     })
 </script>

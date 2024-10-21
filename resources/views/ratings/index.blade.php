@@ -67,19 +67,15 @@
                 {
                     extend: 'pdf',
                     text: 'PDF',
+                    title: 'Rekap Perolehan Data Like Pameran Tugas Akhir Mahasiswa Politeknik Indonusa Surakarta',
                     className: 'btn btn-primary',
                     exportOptions: {
                         columns: [0, 1, 2, 3]
                     },
                     customize: function(doc) {
 
-                    //     doc.content.splice(0, 0, {
-
-                    //         text: `Total Rating: ${jumlahRating}\nRata-Rata Rating Pameran: ${rataRata}`,
-                    //         margin: [0, 0, 0, 12],
-                    //         alignment: 'left'
-                    //     });
-                        doc.content[1].table.widths = ['*', '*', '*', '*'];
+                      
+                        doc.content[1].table.widths = ['5%', '60%', '20%', '15%'];
 
                     }
                 },

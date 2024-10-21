@@ -26,8 +26,17 @@ class PameranController extends Controller
 
     public function index()
     {
-        // $pamerans = Pameran::with('user', 'files')->get();
-        return view('pameran.index');
+        $submittedCount = User::withCount('pamerans')->get()->filter(function ($user) {
+            return $user->pamerans_count > 0;
+        })->count();
+
+        $notSubmittedCount = User::withCount('pamerans')->get()->filter(function ($user) {
+            return $user->pamerans_count <= 0;
+        })->count();
+
+        $totalCount = User::count();
+        
+        return view('pameran.index')->with(compact('submittedCount','notSubmittedCount','totalCount'));
     }
 
     public function data()
@@ -71,6 +80,11 @@ class PameranController extends Controller
     public function data_mahasiswa()
     {
         return Excel::download(new UsersPameranExport, 'data_mahsiswa_rekap_pameran.xlsx');
+    }
+
+    public function data_mahasiswa_pdf()
+    {
+        return Excel::download(new UsersPameranExport, 'data_mahsiswa_rekap_pameran.pdf', \Maatwebsite\Excel\Excel::DOMPDF);
     }
 
     public function create()
