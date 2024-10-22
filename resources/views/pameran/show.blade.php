@@ -171,7 +171,7 @@
                             {{$pameran->title}}
                         </div>
                         <div class="">
-                            <button class="btn btn-primary" style="min-width: 100px; margin-left: 25px;" onclick="Copy();" id="kopi">Salin Link </button>
+                            <button class="btn btn-primary" style="min-width: 100px; margin-left: 25px;" id="kopi">Salin Link </button>
                         </div>
                     </div>
                     <div class="date">
